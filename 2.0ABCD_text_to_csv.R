@@ -1,6 +1,7 @@
 library(dplyr)
 library(skimr)
 library(purrr)
+
 release_names_nda <- read.csv("2.0Release_Sheetnames_from_NDA.csv")
 spread_short_names <- release_names_nda$ShortNameNDA
 
@@ -18,8 +19,6 @@ local_short_names <- local_short_names %>%
   mutate(local_matches_NDAshortname = case_when(!is.na(release_names_nda$ShortNameNDA[match(local_short_names$local_shortname, release_names_nda$ShortNameNDA)]) ~ "Yes",
                                                 is.na(release_names_nda$ShortNameNDA[match(local_short_names$local_shortname, release_names_nda$ShortNameNDA)]) ~ "No")
   )
-
-View(local_short_names)
 
 write.csv(local_short_names %>% arrange(category), "matched_and_categorized_measures_2.0.csv", na = "")
 
@@ -69,8 +68,6 @@ for (p in 1:length(csv_files)) {
   dt = droplevels(dt)
   csv_files[[p]] = dt
 }
-
-csv_files[[2]] %>% glimpse()
 
 reduced_files_left <- csv_files %>% reduce(left_join, by = c("src_subject_id","gender","eventname"))
 reduced_files_full <- csv_files %>% reduce(full_join, by = c("src_subject_id","gender","eventname"))
