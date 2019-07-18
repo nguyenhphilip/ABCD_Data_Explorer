@@ -18,7 +18,7 @@ ui <- fluidPage(
         tags$li("Partner highest education"),
         tags$li("Site ID"),
         tags$li("Family ID")),
-      tags$em("These covariates were pulled from: ABCD Longitudinal Tracking, ABCD Parent Demographics Survey,
+      tags$em("These covariates were pulled from: ABCD Longitudinal Tracking, ABCD ACS Post Stratification Weights,
               ABCD Parent Demographics Survey, and ABCD Longitudinal Parent Demographics Survey."),
       br(),
       tags$h4(tags$a(href = "https://nda.nih.gov/data_dictionary.html?source=ABCD%2BRelease%2B2.0&submission=ALL",
