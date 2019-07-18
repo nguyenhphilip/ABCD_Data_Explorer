@@ -5,8 +5,14 @@ ui <- fluidPage(
       tags$h3("How the app works:"),
       tags$p("This Web App that allows you to build and download a large spreadsheet containing all the variables 
              you're interested in analyzing from the ABCD Dataset."),
-      tags$p("If you don't want to deal with selecting specific variables, simply leave the second textbox blank, 
-             and the downloadable file will contain all the variables contained in the spreadsheets you've selected."),
+      tags$p('An initial spreadsheet with common covariates is built from', 
+             tags$em('ABCD Longitudinal Tracking,'), 
+             tags$em('ABCD ACS Post Stratification Weights,'),
+             tags$em('ABCD Parent Demographics Survey,'),
+             'and,',
+             tags$em('ABCD Longitudinal Parent Demographics Survey.'),
+             'Any additional spreadsheets selected 
+             will build off of this one.'),
       tags$h4("VARIABLES AUTOMATICALLY INCLUDED:"),
       tags$ul(
         tags$li("Subject ID"),
@@ -18,9 +24,6 @@ ui <- fluidPage(
         tags$li("Partner highest education"),
         tags$li("Site ID"),
         tags$li("Family ID")),
-      tags$em("These covariates were pulled from: ABCD Longitudinal Tracking, ABCD ACS Post Stratification Weights,
-              ABCD Parent Demographics Survey, and ABCD Longitudinal Parent Demographics Survey."),
-      br(),
       tags$h4(tags$a(href = "https://nda.nih.gov/data_dictionary.html?source=ABCD%2BRelease%2B2.0&submission=ALL",
                      target = "_blank",
              "Check out the ABCD Data Dictionary to find your spreadsheets and variables of interest. Then:")),
