@@ -54,7 +54,7 @@ ui <- fluidPage(
                )
              ),
       tags$p("Source",
-             tags$a(href = "https://github.com/nguyenhphilip/ABCD_Data_Explorer",
+             tags$a(href = "https://github.com/nguyenhphilip/ABCD_Database_Builder",
                     target = "_blank",
                     "code."
                     )
