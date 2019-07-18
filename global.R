@@ -1,47 +1,38 @@
-sapply(c("shiny","dplyr", "purrr", "here"), require, character.only = TRUE)
-measures_with_categories <- read.csv(here("2.0_NDA_Data","matched_and_categorized_measures_2.0.csv"), row.names = NULL)
+sapply(c("shiny","dplyr", "purrr", "here", "readr"), require, character.only = TRUE)
 
-index_remove <- c()
-for(index in 1:length(measures_with_categories$NIMH_shortname)){
-  if((gsub(".txt","",measures_with_categories$NIMH_shortname[index]) == "")){
-    index_remove[length(index_remove)+1] <- index
-  }
-}
-measures_with_categories <- measures_with_categories[-c(index_remove),]
-unique_cats <- unique(measures_with_categories$category)
+abcd_instruments <- read.csv(here("abcd_instruments_v2.csv"), 
+                                     row.names = NULL) %>% select(-X)
 
-age_event_site <- read.csv(here("2.0_NDA_Data","Other Non-Imaging","ABCD Longitudinal Tracking.csv")) 
-income_ed <- read.csv(here("2.0_NDA_Data","Mental Health", "ABCD Parent Demographics Survey.csv"))
-income_ed_long <- read.csv(here("2.0_NDA_Data","Mental Health", "ABCD Longitudinal Parent Demographics Survey.csv"))
+age_event_site <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Longitudinal Tracking.Rds"))
+income_ed_bl <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Parent Demographics Survey.Rds"))
+race_eth_family <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD ACS Post Stratification Weights.Rds"))
+income_ed_y1 <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Longitudinal Parent Demographics Survey.Rds"))
 
-covariate_vars <- c("src_subject_id","eventname","interview_age", "demo_sex_v2","demo_gender_id_v2",
-                    "demo_comb_income_v2", "demo_prnt_ed_v2", "demo_prtnr_ed_v2", "site_id_l")
+covariate_vars <- c("src_subject_id",
+                    "eventname",
+                    "interview_age", 
+                    "demo_sex_v2",
+                    "race_ethnicity",
+                    "demo_comb_income_v2", 
+                    "demo_prnt_ed_v2", 
+                    "demo_prtnr_ed_v2", 
+                    "site_id_l", 
+                    "rel_family_id")
 
-covariates <- age_event_site %>% left_join(income_ed, by = c("src_subject_id","eventname"))
-
-covariates <- covariates %>% left_join(income_ed_long, by = c("src_subject_id","eventname")) %>%
+covariates <- age_event_site %>% 
+  full_join(income_ed_bl, by = c("src_subject_id","eventname")) %>%
+  full_join(race_eth_family, by = c("src_subject_id", "eventname")) %>%
+  full_join(income_ed_y1, by = c("src_subject_id","eventname")) %>%
   select(covariate_vars)
 
-createCSVS <- function(categories){
-  all_csvs <- c()
-  for(category in categories){
-    if(length(categories) > 0){
-      for(file in list.files(here("2.0_NDA_Data",category))){
-        df <- (gsub(".csv", "", file))
-        all_csvs[[length(all_csvs) + 1]] <- df
-      }
-    }
-  }
-  return(all_csvs)
-}
+remove(list = c("age_event_site", "income_ed_bl", "race_eth_family", "income_ed_y1"))
 
-createVars <- function(categories, spreads){ #spreads = input$datasets
+createVars <- function(spreads){ #spreads = input$datasets
   all_vars <- c()
-  for(category in categories){
-    for(file in list.files(here("2.0_NDA_Data",category))){
+    for(file in list.files(here("2.0-ABCD-Release-R-format"))){
       for(spread in spreads){
-        if(file == paste0(spread,".csv")){
-          df <- read.csv(here("2.0_NDA_Data",category, file))
+        if(file == paste0(spread,".Rds")){
+          df <- readRDS(here("2.0-ABCD-Release-R-format", file))
           for(variable in names(df)){
             if(variable %in% covariate_vars){
               next;
@@ -52,6 +43,5 @@ createVars <- function(categories, spreads){ #spreads = input$datasets
         }
       }
     }
-  }
   return(all_vars)
 }
