@@ -26,12 +26,12 @@ ui <- fluidPage(
         tags$li("Family ID")),
       tags$h4(tags$a(href = "https://nda.nih.gov/data_dictionary.html?source=ABCD%2BRelease%2B2.0&submission=ALL",
                      target = "_blank",
-             "Check out the ABCD Data Dictionary to find your spreadsheets and variables of interest. Then:")),
+                     "Check out the ABCD Data Dictionary to find your spreadsheets and variables of interest. Then:")),
       br(),
       selectInput(inputId = "datasets",
                   label = "1) Search for and select your dataset(s):",
                   selected = "",
-                  choices = gsub(".Rds", "", list.files(here("2.0-ABCD-Release-R-format"), pattern = ".Rds")),
+                  choices = gsub(".csv", "", list.files(here("2.0-ABCD-Release-updated"), pattern = ".csv")),
                   multiple = TRUE
       ),
       hr(),
@@ -41,7 +41,6 @@ ui <- fluidPage(
                   choices = "",
                   multiple = TRUE
       ),
-
       hr(),
       textInput(inputId = "title",
                 label = "3) Name the download file:",
@@ -51,17 +50,17 @@ ui <- fluidPage(
       br(),hr(),
       tags$p("Built and maintained by:",
              tags$em(
-               tags$a(href = "https://twitter.com/NguyenHPhil",
+               tags$a(href = "https://github.com/nguyenhphilip/",
                       target = "_blank",
                       "Phil Nguyen, ABCD Study Research Assistant @ UVM")
-               )
-             ),
+             )
+      ),
       tags$p("Source",
              tags$a(href = "https://github.com/nguyenhphilip/ABCD_Database_Builder",
                     target = "_blank",
                     "code."
-                    )
              )
+      )
       ),
     mainPanel(
       HTML(paste0("Once you've selected your variables of interest, a preview of your spreadsheet will be shown below.")),
@@ -72,7 +71,7 @@ ui <- fluidPage(
           DT::dataTableOutput(outputId = "table"),
           width = 12
         )
-        )
       )
+    )
     )
   )
