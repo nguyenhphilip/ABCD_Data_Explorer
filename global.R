@@ -1,12 +1,9 @@
 sapply(c("shiny","dplyr", "purrr", "here", "readr"), require, character.only = TRUE)
 
-abcd_instruments <- read.csv(here("abcd_instruments_v2.csv"), 
-                                     row.names = NULL) %>% select(-X)
-
-age_event_site <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Longitudinal Tracking.Rds"))
-income_ed_bl <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Parent Demographics Survey.Rds"))
-race_eth_family <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD ACS Post Stratification Weights.Rds"))
-income_ed_y1 <- readRDS(here("2.0-ABCD-Release-R-format", "ABCD Longitudinal Parent Demographics Survey.Rds"))
+age_event_site <- readr::read_csv(here("2.0-ABCD-Release-updated", "ABCD Longitudinal Tracking.csv"))
+income_ed_bl <- readr::read_csv(here("2.0-ABCD-Release-updated", "ABCD Parent Demographics Survey.csv"))
+race_eth_family <- readr::read_csv(here("2.0-ABCD-Release-updated", "ABCD ACS Post Stratification Weights.csv"))
+income_ed_y1 <- readr::read_csv(here("2.0-ABCD-Release-updated", "ABCD Longitudinal Parent Demographics Survey.csv"))
 
 covariate_vars <- c("src_subject_id",
                     "eventname",
@@ -29,19 +26,15 @@ remove(list = c("age_event_site", "income_ed_bl", "race_eth_family", "income_ed_
 
 createVars <- function(spreads){ #spreads = input$datasets
   all_vars <- c()
-    for(file in list.files(here("2.0-ABCD-Release-R-format"))){
-      for(spread in spreads){
-        if(file == paste0(spread,".Rds")){
-          df <- readRDS(here("2.0-ABCD-Release-R-format", file))
-          for(variable in names(df)){
-            if(variable %in% covariate_vars){
-              next;
-            } else {
-              all_vars[length(all_vars) + 1] <- variable
-            }
-          }
+  for(file in list.files(here("2.0-ABCD-Release-updated"))){
+    for(spread in spreads){
+      if(file == paste0(spread,".csv")){
+        df <- read_csv(here("2.0-ABCD-Release-updated", file))
+        for(variable in names(df)){
+            all_vars[length(all_vars) + 1] <- variable
         }
       }
     }
+  }
   return(all_vars)
 }
