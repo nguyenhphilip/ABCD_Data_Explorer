@@ -1,4 +1,4 @@
-sapply(c("shiny","dplyr", "purrr", "here", "readr", "skimr", "data.table"), require, character.only = TRUE)
+sapply(c("shiny","dplyr", "purrr", "here", "readr", "data.table"), require, character.only = TRUE, lib.loc)
 
 read_abcd_table <- function(t){
   a = read.table(file = t, sep = "\t", header = T, na.strings = c("", NA), colClasses = "character")[-1,]
@@ -7,7 +7,7 @@ read_abcd_table <- function(t){
     a$eventname = a$visit
   }
   
-  inst_name = gsub("_id", "", colnames(a)[1])
+inst_name = gsub("_id", "", colnames(a)[1])
   if (inst_name=="abcd_midabwdp201"){
     #both "abcd_midabwdp201" and "abcd_midabwdp01" have the same variables (same values), delete one;
     a = a[,!(names(a) %in% c("tfmri_mid_all_antic.large.vs.small.reward_beta_cort.destrieux_g.front.inf.orbital.rh","visit","interview_age","interview_date","gender"))]
@@ -64,3 +64,8 @@ createVars <- function(spreads){ #spreads = input$datasets
   }
   return(all_vars)
 }
+
+myPaths <- .libPaths()
+myPaths <- c(myPaths[2], myPaths[1])
+myPaths <- c(myPaths, "C:/path/to/Package")
+.libPaths(myPaths)
