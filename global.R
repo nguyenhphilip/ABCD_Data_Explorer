@@ -1,4 +1,4 @@
-sapply(c("shiny","dplyr", "purrr", "here", "readr", "data.table"), require, character.only = TRUE, lib.loc)
+sapply(c("shiny","dplyr", "purrr", "here", "readr", "data.table"), require, character.only = TRUE)
 
 read_abcd_table <- function(t){
   a = read.table(file = t, sep = "\t", header = T, na.strings = c("", NA), colClasses = "character")[-1,]

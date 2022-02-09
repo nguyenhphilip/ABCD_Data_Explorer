@@ -1,6 +1,6 @@
 ui <- fluidPage(
   tags$style("#skim_tab{display:none;}"),
-  titlePanel(title="ABCD Data Builder 3.0.0"),
+  titlePanel(title="ABCD Data Builder 4.0.0"),
   sidebarLayout(
     sidebarPanel(
       tags$h3("How the app works:"),
