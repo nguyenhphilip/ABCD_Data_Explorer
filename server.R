@@ -1,3 +1,5 @@
+# Backend stuff
+
 server <- function(input, output, session) {
   
   # create a list of spreadsheets to be merged and returned at the end

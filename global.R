@@ -1,5 +1,6 @@
 sapply(c("shiny","dplyr", "purrr", "here", "readr", "data.table"), require, character.only = TRUE)
 
+# function to read in data
 read_abcd_table <- function(t){
   a = read.table(file = t, sep = "\t", header = T, na.strings = c("", NA), colClasses = "character")[-1,]
   a = a[,!(names(a) %in% c("collection_id", "collection_title", "promoted_subjectkey", "subjectkey", "study_cohort_name", "dataset_id"))]
@@ -7,7 +8,8 @@ read_abcd_table <- function(t){
     a$eventname = a$visit
   }
   
-inst_name = gsub("_id", "", colnames(a)[1])
+  inst_name = gsub("_id", "", colnames(a)[1])
+  
   if (inst_name=="abcd_midabwdp201"){
     #both "abcd_midabwdp201" and "abcd_midabwdp01" have the same variables (same values), delete one;
     a = a[,!(names(a) %in% c("tfmri_mid_all_antic.large.vs.small.reward_beta_cort.destrieux_g.front.inf.orbital.rh","visit","interview_age","interview_date","gender"))]
@@ -24,6 +26,8 @@ inst_name = gsub("_id", "", colnames(a)[1])
 is_all_numeric <- function(x) {
   !any(is.na(suppressWarnings(as.numeric(na.omit(x))))) & is.character(x)
 }
+
+# gather common covariates for initial spreadsheet to merge on
 
 age_event_site_sex <- read_abcd_table(here("data", "abcd_lt01.txt")) # age, event, site, sex
 income_ed_bl <- read_abcd_table(here("data", "abcd_lpds01.txt")) # household income, parent highest ed
@@ -64,8 +68,3 @@ createVars <- function(spreads){ #spreads = input$datasets
   }
   return(all_vars)
 }
-
-myPaths <- .libPaths()
-myPaths <- c(myPaths[2], myPaths[1])
-myPaths <- c(myPaths, "C:/path/to/Package")
-.libPaths(myPaths)
